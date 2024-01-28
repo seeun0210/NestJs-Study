@@ -1,16 +1,9 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:@next/next/recommended",
-    "plugin:prettier/recommended"
-  ],
-  "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "singleQuote": true,
-        "trailingComma": "all"
-      }
-    ]
-  }
+  "singleQuote": true,
+  "tabWidth": 2, 
+  "trailingComma": "all",
+  "printWidth": 80, 
+  "quoteProps": "as-needed",
+  "arrowParens": "always",
+  "endOfLine": "auto"
 }
