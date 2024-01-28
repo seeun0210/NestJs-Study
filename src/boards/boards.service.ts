@@ -28,11 +28,8 @@ export class BoardsService {
     return found;
   }
   deleteBoard(id: string): void {
-    const found = this.boards.find((board) => board.id === id);
-    if (!found) {
-      throw new NotFoundException(`${id}를 찾을 수 없습니다`);
-    }
-    this.boards = this.boards.filter((board) => board.id != id);
+    const found = this.getBoardById(id);
+    this.boards = this.boards.filter((board) => board.id != found.id);
   }
   updateBoardStatus(id: string, status: BoardStatus): Board {
     const board = this.getBoardById(id);
