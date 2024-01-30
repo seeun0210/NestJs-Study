@@ -3,7 +3,7 @@ import {
   BaseEntity,
   Column,
   Entity,
-  ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BoardStatus } from './board-status.enum';
@@ -22,7 +22,7 @@ export class Board extends BaseEntity {
 
   @Column()
   status: BoardStatus;
-
-  @ManyToMany((type) => User, (user) => user.boards, { eager: false })
+  //관계 맺을 때 데코레이터 제대로 안쓰면 관계형성 안됨...
+  @ManyToOne((type) => User, (user) => user.boards, { eager: false })
   user: User;
 }
