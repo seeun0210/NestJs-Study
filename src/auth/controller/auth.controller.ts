@@ -13,6 +13,14 @@ export class AuthController {
   ): Promise<AuthCredentialsDto> {
     const result = await this.authService.signUp(authCredentialsDto);
     console.log('controller_result::', result);
+    return authCredentialsDto;
+  }
+  @Post('/signin')
+  async signIn(
+    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
+  ): Promise<string> {
+    const result = await this.authService.signIn(authCredentialsDto);
+    console.log('controller_signin', result);
     return result;
   }
 }

@@ -9,16 +9,14 @@ import {
 import * as bcrypt from 'bcryptjs';
 @CustomRepository(User)
 export class UserRepository extends Repository<User> {
-  async createUser(
-    authCredentialsDto: AuthCredentialsDto,
-  ): Promise<User | null> {
+  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredentialsDto;
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = this.create({ username, password: hashedPassword });
     try {
-      return await this.save(newUser);
+      await this.save(newUser);
     } catch (err) {
       console.log('err::', err);
       if (err.code === '23505') {
