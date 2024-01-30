@@ -44,9 +44,18 @@ export class BoardsService {
     await this.boardRepository.save(board);
     return board;
   }
-  async getAllBoards() {
+  async getAllBoards(user: User) {
+    //방법2) QueryBuilder 이용하기
+    const query = this.boardRepository.createQueryBuilder('board');
+    query.where('board.userId=:userId', { userId: user.id });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const boards: Board[] = await this.boardRepository.find();
+    const boards: Board[] = await query.getMany();
+
+    //방법1) typeORM 내장 API 활용하기
+    // const boards: Board[] = await this.boardRepository.find({
+    //   where: { user: user },
+    // });
+
     return boards;
   }
 }
