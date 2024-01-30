@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './board.entity';
 import { BoardRepository } from './board.repository';
+import { BoardStatus } from './board-status.enum';
 
 @Injectable()
 export class BoardsService {
@@ -32,5 +33,11 @@ export class BoardsService {
       // 게시물이 존재하지 않으면 예외를 발생시킵니다.
       throw new NotFoundException(`게시물이 존재하지 않습니다.`);
     }
+  }
+  async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
+    const board = await this.getBoardById(id);
+    board.status = status;
+    await this.boardRepository.save(board);
+    return board;
   }
 }
