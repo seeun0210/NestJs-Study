@@ -1,8 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  InternalServerErrorException,
+  NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   UsePipes,
   ValidationPipe,
@@ -41,6 +45,20 @@ export class BoardsController {
   // deleteBoard(@Param('id') id: string): void {
   //   this.boardsService.deleteBoard(id);
   // }
+  @Delete('/:id')
+  async deleteBoard(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<{ message: string; statusCode: number }> {
+    try {
+      const result = await this.boardsService.deleteBoard(id);
+      return { message: result.message, statusCode: result.statusCode };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException('Internal Server Error');
+    }
+  }
   // @Patch('/:id')
   // updateBoardStatus(
   //   @Param('id') id: string,
