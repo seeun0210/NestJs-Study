@@ -10,6 +10,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UnauthorizedException,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -42,15 +43,21 @@ export class BoardsController {
   @Delete('/:id')
   async deleteBoard(
     @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
   ): Promise<{ message: string; statusCode: number }> {
     try {
-      const result = await this.boardsService.deleteBoard(id);
+      const result = await this.boardsService.deleteBoard(id, user);
       return { message: result.message, statusCode: result.statusCode };
     } catch (error) {
-      if (error instanceof NotFoundException) {
+      if (error.status === 404) {
+        // NotFoundException
         throw new NotFoundException(error.message);
+      } else if (error.status === 401) {
+        // UnauthorizedException
+        throw new UnauthorizedException(error.message);
+      } else {
+        throw new InternalServerErrorException('Internal Server Error');
       }
-      throw new InternalServerErrorException('Internal Server Error');
     }
   }
   @Patch('/:id')
