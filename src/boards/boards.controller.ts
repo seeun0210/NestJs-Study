@@ -52,9 +52,6 @@ export class BoardsController {
       if (error.status === 404) {
         // NotFoundException
         throw new NotFoundException(error.message);
-      } else if (error.status === 401) {
-        // UnauthorizedException
-        throw new UnauthorizedException(error.message);
       } else {
         throw new InternalServerErrorException('Internal Server Error');
       }
@@ -63,9 +60,10 @@ export class BoardsController {
   @Patch('/:id')
   async updateBoard(
     @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
     @Body('status', BoardStatusValidationPipe) status: BoardStatus,
-  ) {
-    return this.boardsService.updateBoardStatus(id, status);
+  ): Promise<Board> {
+    return this.boardsService.updateBoardStatus(id, status, user);
   }
   @Get()
   async getAllBoards(@GetUser() user: User): Promise<Board[]> {

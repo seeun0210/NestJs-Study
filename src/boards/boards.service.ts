@@ -1,7 +1,7 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './board.entity';
@@ -38,11 +38,8 @@ export class BoardsService {
     if (!board) {
       throw new NotFoundException(`게시물이 존재하지 않습니다.`);
     }
-
-    if (board.user !== user) {
-      throw new UnauthorizedException(`게시물을 삭제할 권한이 없습니다.`);
-    }
-
+    // console.log(board.user);
+    //-> undefined 접근 불가능함 이렇게는
     const result = await this.boardRepository.delete({ id, user });
 
     if (result.affected) {
@@ -51,11 +48,24 @@ export class BoardsService {
       throw new NotFoundException(`게시물이 존재하지 않습니다.`);
     }
   }
-  async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
-    const board = await this.getBoardById(id);
-    board.status = status;
-    await this.boardRepository.save(board);
-    return board;
+  async updateBoardStatus(
+    id: number,
+    status: BoardStatus,
+    user: User,
+  ): Promise<Board> {
+    try {
+      const query = await this.boardRepository.createQueryBuilder('board');
+      query.where('board.userId = :userId AND board.id = :id', {
+        userId: user.id,
+        id,
+      });
+      const board = await query.getOneOrFail();
+      board.status = status;
+      await this.boardRepository.save(board);
+      return board;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
   }
   async getAllBoards(user: User) {
     //방법2) QueryBuilder 이용하기
