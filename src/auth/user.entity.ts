@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   BaseEntity,
   Column,
@@ -10,11 +11,13 @@ import {
 @Unique(['username'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
+  @Exclude()
   id: number;
 
   @Column()
   username: string;
 
   @Column()
+  @Exclude()
   password: string;
 }

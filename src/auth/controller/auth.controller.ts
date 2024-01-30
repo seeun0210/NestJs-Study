@@ -12,7 +12,7 @@ export class AuthController {
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
   ): Promise<AuthCredentialsDto> {
     const result = await this.authService.signUp(authCredentialsDto);
-    console.log(result);
+    console.log('controller_result::', result);
     return result;
   }
 }
