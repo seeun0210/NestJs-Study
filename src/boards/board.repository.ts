@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { Board } from './board.entity';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardStatus } from './board-status.enum';
-import { CustomRepository } from './typeorm-ex.decorator';
+import { CustomRepository } from '../typeorm/typeorm-ex.decorator';
 
 @CustomRepository(Board)
 export class BoardRepository extends Repository<Board> {
