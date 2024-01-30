@@ -40,4 +40,9 @@ export class BoardsService {
     await this.boardRepository.save(board);
     return board;
   }
+  async getAllBoards() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const boards: Board[] = await this.boardRepository.find();
+    return boards;
+  }
 }

@@ -51,11 +51,8 @@ export class BoardsController {
   ) {
     return this.boardsService.updateBoardStatus(id, status);
   }
-  // @Patch('/:id')
-  // updateBoardStatus(
-  //   @Param('id') id: string,
-  //   @Body('status', BoardStatusValidationPipe) status: BoardStatus,
-  // ) {
-  //   return this.boardsService.updateBoardStatus(id, status);
-  // }
+  @Get('/')
+  async getAllBoards(): Promise<Board[]> {
+    return await this.boardsService.getAllBoards();
+  }
 }
